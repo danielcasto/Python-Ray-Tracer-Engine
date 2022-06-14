@@ -1,5 +1,4 @@
 class Environment:
-
     def __init__(self, size):
         # TODO
         return self
