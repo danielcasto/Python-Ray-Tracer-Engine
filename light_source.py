@@ -9,7 +9,9 @@ class DirectionalInfinite(LightSource):
 class Point(LightSource):
     def __init__(self):
         super().__init__()
+        # TODO currently unsupported
 
 class DirectionalPoint(LightSource):
     def __init__(self):
         super().__init__()
+        # TODO currently unsupported
