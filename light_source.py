@@ -1,17 +1,16 @@
-class LightSource:
-    def __init__(self):
+class DirectionalInfiniteLight:
+    def __init__(self, intensity, direction):
+        # TODO currently unsupported
         pass
 
-class DirectionalInfinite(LightSource):
-    def __init__(self):
-        super().__init__()
 
-class Point(LightSource):
-    def __init__(self):
-        super().__init__()
+class PointLight:
+    def __init__(self, intensity, pos):
         # TODO currently unsupported
+        pass
 
-class DirectionalPoint(LightSource):
-    def __init__(self):
-        super().__init__()
+
+class ConeLight:
+    def __init__(self, intensity, pos, direction, angle):
         # TODO currently unsupported
+        pass
