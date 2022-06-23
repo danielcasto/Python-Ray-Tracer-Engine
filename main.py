@@ -1,35 +1,23 @@
 import pygame as pg
 import numpy as np
 from environment import Environment
-from sys import exit
+from sys import exit, argv
+from test.environment_test import *
+from test.display_test import *
 
 SCREEN_DIMENSIONS = (1000, 600) # (width, height)
 
-def display_test():
-    pg.init()
+def run_tests():
+    env_init_test()
 
-    test_surf = pg.Surface(SCREEN_DIMENSIONS)
-    TEST_RGB = np.full((1000, 600, 3), (255,0,0))
-
-    screen = pg.display.set_mode(SCREEN_DIMENSIONS, pg.RESIZABLE)
-    pg.display.set_caption('DISPLAY TEST')
-    program_is_alive = True
-    
-    pg.surfarray.blit_array(test_surf, TEST_RGB)
-
-    # game loop
-    while program_is_alive:
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                program_is_alive = False
-
-        screen.blit(test_surf, (0,0))
-        pg.display.flip()
-        
-    pg.quit()
-    exit()
+    display_test(pg, np, SCREEN_DIMENSIONS, exit)
 
 def main():
+    # Check for test command line arg
+
+    if len(argv) == 2 and argv[1] == 'test':
+        run_tests()
+
     pg.init()
     screen = pg.display.set_mode(SCREEN_DIMENSIONS, pg.RESIZABLE)
     pg.display.set_caption('Python Ray Tracer Engine')
@@ -52,10 +40,7 @@ def main():
         pg.display.flip()
         
     pg.quit()
-    exit()
-        
-
+    exit()     
 
 if __name__ == '__main__':
     main()
-    # display_test()
