@@ -8,8 +8,9 @@ from test.display_test import *
 SCREEN_DIMENSIONS = (1000, 600) # (width, height)
 
 def run_tests():
-    env_init_test()
-
+    print('\n\nRunning tests...\n\n')
+    environment_init_test()
+    
     display_test(pg, np, SCREEN_DIMENSIONS, exit)
 
 def main():

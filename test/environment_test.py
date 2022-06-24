@@ -1,7 +1,10 @@
 from environment import Environment
 
-def env_init_test():
+def environment_init_test():
     TEST_SIZE = (500, 500)
-    env = Environment(TEST_SIZE)
+    environment = Environment(TEST_SIZE)
 
-    assert env.size == TEST_SIZE
+    assert environment.size == TEST_SIZE, f"environment_init_test: TEST_SIZE: {TEST_SIZE}, is not equal to env.size: {environment.size}"
+
+
+
