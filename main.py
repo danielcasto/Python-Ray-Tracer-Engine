@@ -9,8 +9,11 @@ SCREEN_DIMENSIONS = (1000, 600) # (width, height)
 
 def run_tests():
     print('\n\nRunning tests...\n\n')
-    environment_init_test()
     
+    # environnment tests
+    environment_init_test()
+    add_light_sources_test(np)
+
     display_test(pg, np, SCREEN_DIMENSIONS, exit)
 
 def main():

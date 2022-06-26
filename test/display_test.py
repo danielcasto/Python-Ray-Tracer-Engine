@@ -1,3 +1,6 @@
+from time import sleep
+
+
 def display_test(pg, np, SCREEN_DIMENSIONS, exit):
     pg.init()
 
@@ -10,14 +13,10 @@ def display_test(pg, np, SCREEN_DIMENSIONS, exit):
     
     pg.surfarray.blit_array(test_surf, TEST_RGB)
 
-    # game loop
-    while program_is_alive:
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                program_is_alive = False
+    screen.blit(test_surf, (0,0))
+    pg.display.flip()
 
-        screen.blit(test_surf, (0,0))
-        pg.display.flip()
-        
+    sleep(0.5)
+
     pg.quit()
     exit()

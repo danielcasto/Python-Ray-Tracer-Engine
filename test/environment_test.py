@@ -1,10 +1,54 @@
 from environment import Environment
+from light_source import ConeLight, PointLight, DirectionalInfiniteLight
+from math import isclose
 
 def environment_init_test():
-    TEST_SIZE = (500, 500)
+    TEST_SIZE = (100, 100)
     environment = Environment(TEST_SIZE)
 
-    assert environment.size == TEST_SIZE, f"environment_init_test: TEST_SIZE: {TEST_SIZE}, is not equal to env.size: {environment.size}"
+    assert environment.size == TEST_SIZE, \
+        f'environment_init_test::  TEST_SIZE: {TEST_SIZE}, is not equal to env.size: {environment.size}'
 
+def add_light_sources_test(np):
+    TEST_SIZE = (100, 100)
+    intensity = 100.0
+    pos = np.array([1.0,0.0])
+    direction = np.array([1.0,0.0])
+    angle = 100.0
+    
+    environment = Environment(TEST_SIZE)
+    environment.add_light_source('cone', intensity=intensity, pos=pos, direction=direction, angle=angle)
+    assert isinstance(environment.lights[0], ConeLight) \
+        and isclose(environment.lights[0].intensity, intensity) \
+        and np.allclose(environment.lights[0].pos, pos) \
+        and np.allclose(environment.lights[0].direction, direction) \
+        and isclose(environment.lights[0].angle, angle), \
+        f'''add_light_sources_test (ConeLight)::
+            isinstance(environment.lights[0], ConeLight): {isinstance(environment.lights[0], ConeLight)},
+            isclose(environment.lights[0].intensity, intensity): {isclose(environment.lights[0].intensity, intensity)},
+            np.allclose(environment.lights[0].pos, pos): {np.allclose(environment.lights[0].pos, pos)}
+            np.allclose(environment.lights[0].direction, direction): {np.allclose(environment.lights[0].direction, direction)}
+            isclose(environment.lights[0].angle, angle): {isclose(environment.lights[0].angle, angle)}
+        '''
 
-
+    environment = Environment(TEST_SIZE)
+    environment.add_light_source('directionalinfinite', intensity=intensity, direction=direction)
+    assert isinstance(environment.lights[0], DirectionalInfiniteLight) \
+        and isclose(environment.lights[0].intensity, intensity) \
+        and np.allclose(environment.lights[0].direction, direction), \
+        f'''add_light_sources_test (DirectionalInfinite)::
+            isinstance(environment.lights[0], DirectionalInfinite): {isinstance(environment.lights[0], DirectionalInfiniteLight)},
+            isclose(environment.lights[0].intensity, intensity): {isclose(environment.lights[0].intensity, intensity)},
+            np.allclose(environment.lights[0].direction, direction): {np.allclose(environment.lights[0].direction, direction)}
+        '''
+    
+    environment = Environment(TEST_SIZE)
+    environment.add_light_source('point', intensity=intensity, pos=pos)
+    assert isinstance(environment.lights[0], PointLight) \
+        and isclose(environment.lights[0].intensity, intensity) \
+        and np.allclose(environment.lights[0].pos, pos), \
+        f'''add_light_sources_test (PointLight)::
+            isinstance(environment.lights[0], PointLight): {isinstance(environment.lights[0], PointLight)}
+            isclose(environment.lights[0].intensity, intensity): {isclose(environment.lights[0].intensity, intensity)}
+            np.allclose(environment.lights[0].pos, pos): {np.allclose(environment.lights[0].pos, pos)}
+        '''
