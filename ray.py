@@ -1,7 +1,7 @@
 from io import UnsupportedOperation
+from numpy import array
 
 class Ray:
     def __init__(self, origin, direction):
-        # TODO currently unsupported
-        raise UnsupportedOperation
-        pass
+        self.origin: array = origin
+        self.direction: array = direction

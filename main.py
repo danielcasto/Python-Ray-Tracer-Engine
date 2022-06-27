@@ -2,16 +2,21 @@ import pygame as pg
 import numpy as np
 from environment import Environment
 from sys import exit, argv
+from test.camera_test import *
 from test.environment_test import *
 from test.display_test import *
 
-SCREEN_DIMENSIONS = (1000, 600) # (width, height)
+SCREEN_DIMENSIONS = (1025, 511) # (width, height)
+# TODO for now only odd dimensions are supported
 
 def run_tests():
     print('\n\nRunning tests...\n\n')
     
+    # camera tests
+    parallel_camera_init_test(np)
+
     # environnment tests
-    environment_init_test()
+    '''environment_init_test()
     add_light_sources_test(np)
     add_triangle_test(np)
     add_sphere_test(np)
@@ -19,7 +24,7 @@ def run_tests():
     with_perspective_camera_test(np)
     use_camera_test(np)
 
-    display_test(pg, np, SCREEN_DIMENSIONS, exit)
+    display_test(pg, np, SCREEN_DIMENSIONS, exit)'''
 
 def main():
     # Check for test command line arg

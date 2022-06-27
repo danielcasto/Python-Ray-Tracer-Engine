@@ -5,7 +5,7 @@ def display_test(pg, np, SCREEN_DIMENSIONS, exit):
     pg.init()
 
     test_surf = pg.Surface(SCREEN_DIMENSIONS)
-    TEST_RGB = np.full((1000, 600, 3), (255,0,0))
+    TEST_RGB = np.full((SCREEN_DIMENSIONS[0], SCREEN_DIMENSIONS[1], 3), (255,0,0))
 
     screen = pg.display.set_mode(SCREEN_DIMENSIONS, pg.RESIZABLE)
     pg.display.set_caption('DISPLAY TEST')
