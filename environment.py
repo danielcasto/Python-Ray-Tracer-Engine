@@ -2,6 +2,7 @@ from io import UnsupportedOperation
 from typing import Any
 from numpy import array
 from light_source import ConeLight, PointLight, DirectionalInfiniteLight
+from shapes import Triangle, Sphere
 
 class Environment:
     def __init__(self, size: tuple[int, int]) -> None:
@@ -24,8 +25,8 @@ class Environment:
         return self
 
     def add_triangle(self, v1: array, v2: array, v3: array, color: tuple[int, int, int]) -> Any:
-        # TODO currently unsupported
-        raise UnsupportedOperation
+        self.shapes.append(Triangle(v1, v2, v3, color))
+
         return self
     
     def add_sphere(self, center: array, radius: float, color: tuple[int, int, int]) -> Any:
