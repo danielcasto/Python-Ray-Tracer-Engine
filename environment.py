@@ -1,5 +1,6 @@
 from io import UnsupportedOperation
 from numpy import array
+from camera import ParallelCamera
 from light_source import ConeLight, PointLight, DirectionalInfiniteLight
 from shapes import Triangle, Sphere
 
@@ -34,8 +35,7 @@ class Environment:
         return self
     
     def with_parallel_camera(self, w: array, v: array, u: array, e: array):
-        # TODO currently unsupported
-        raise UnsupportedOperation
+        self.camera: ParallelCamera = ParallelCamera(w, v, u, e)
         return self
     
     def with_perspective_camera(self, w: array, v: array, u: array, e: array, d: float):

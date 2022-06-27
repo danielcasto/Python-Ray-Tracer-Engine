@@ -15,6 +15,8 @@ def run_tests():
     add_light_sources_test(np)
     add_triangle_test(np)
     add_sphere_test(np)
+    with_parallel_camera_test(np)
+    with_perspective_camera_test
 
     display_test(pg, np, SCREEN_DIMENSIONS, exit)
 
