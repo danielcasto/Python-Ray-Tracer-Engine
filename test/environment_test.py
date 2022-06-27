@@ -186,7 +186,7 @@ def with_perspective_camera_test(np):
     d = 10.0
 
     environment = Environment(TEST_SIZE)
-    environment.with_parallel_camera(w, v, u, e)
+    environment.with_perspective_camera(w, v, u, e, d)
 
     assert np.allclose(environment.camera.w, w) \
         and np.allclose(environment.camera.v, v) \
@@ -200,3 +200,7 @@ def with_perspective_camera_test(np):
                     np.allclose(environment.camera.e, e): {np.allclose(environment.camera.e, e)}
                     isclose(environment.camera.d, d): {isclose(environment.camera.d, d)}
             '''
+
+def use_camera_test():
+    # TODO come back and do this last
+    pass
