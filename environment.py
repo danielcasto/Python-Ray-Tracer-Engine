@@ -30,8 +30,8 @@ class Environment:
         return self
     
     def add_sphere(self, center: array, radius: float, color: tuple[int, int, int]) -> Any:
-        # TODO currently unsupported
-        raise UnsupportedOperation
+        self.shapes.append(Sphere(center, radius, color))
+
         return self
     
     def with_parallel_camera(self, w: array, v: array, u: array, e: array) -> Any:

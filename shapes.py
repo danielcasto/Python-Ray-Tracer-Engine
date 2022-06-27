@@ -9,9 +9,17 @@ class Triangle:
 
         try:
             assert color[0] <= 255 and color[1] <= 255 and color[2] <= 255
-        except(AssertionError):
+        except AssertionError:
             raise Exception(color, 'Out of bounds color value(s), values must be: 0 <= value <= 255')
 
 
 class Sphere:
-    pass
+    def __init__(self, center: array, radius: float, color: tuple[int, int, int]):
+        self.center: array = center
+        self.radius: float = radius
+        self.color: tuple[int, int, int] = color
+
+        try:
+            assert color[0] <= 255 and color[1] <= 255 and color[2] <= 255
+        except AssertionError:
+            raise Exception(color, 'Out of bounds color value(s), values must be: 0 <= value <= 255')

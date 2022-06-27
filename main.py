@@ -14,6 +14,7 @@ def run_tests():
     environment_init_test()
     add_light_sources_test(np)
     add_triangle_test(np)
+    add_sphere_test(np)
 
     display_test(pg, np, SCREEN_DIMENSIONS, exit)
 

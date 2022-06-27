@@ -12,8 +12,8 @@ def environment_init_test():
 def add_light_sources_test(np):
     TEST_SIZE = (100, 100)
     intensity = 100.0
-    pos = np.array([1.0,0.0])
-    direction = np.array([1.0,0.0])
+    pos = np.array([1.0, 0.0])
+    direction = np.array([1.0, 0.0])
     angle = 100.0
     
     environment = Environment(TEST_SIZE)
@@ -52,6 +52,17 @@ def add_light_sources_test(np):
                 isclose(environment.lights[0].intensity, intensity): {isclose(environment.lights[0].intensity, intensity)}
                 np.allclose(environment.lights[0].pos, pos): {np.allclose(environment.lights[0].pos, pos)}
         '''
+    
+    # Invalid light type
+    environment = Environment(TEST_SIZE)
+    try:
+        environment.add_light_source('somelight', intensity=intensity, pos=pos, direction=direction, angle=angle)
+    except Exception as e:
+        assert e.args == ('somelight', 'Invalid light_type. Can only be cone, point, or directionalinfinite'), \
+            f'''add_light_sources_test(invalid light type)::
+                    e.args == ('somelight', 'Invalid light_type. Can only be cone, point, or directionalinfinite'): 
+                        {e.args == ('somelight', 'Invalid light_type. Can only be cone, point, or directionalinfinite')}
+            '''
 
 def add_triangle_test(np):
     TEST_SIZE = (100, 100)
@@ -72,3 +83,73 @@ def add_triangle_test(np):
                 np.allclose(environment.shapes[0].v3, v3): {np.allclose(environment.shapes[0].v3, v3)}
                 environment.shapes[0].color == color: {environment.shapes[0].color == color}
         '''
+
+    # Invalid color (greater than 255):
+    greater_than_color_bound = (256,0,0)
+    environment = Environment(TEST_SIZE)
+
+    try:
+        environment.add_triangle(v1, v2, v3, greater_than_color_bound)
+    except Exception as e:
+        assert e.args == (greater_than_color_bound, 'Out of bounds color value(s), values must be: 0 <= value <= 255'), \
+            f'''add_triangle_test(greater than color bound)::
+                    e.args == ((256,0,0), 'Out of bounds color value(s), values must be: 0 <= value <= 255'): 
+                        {e.args == (greater_than_color_bound, 'Out of bounds color value(s), values must be: 0 <= value <= 255')}
+            '''
+
+    # Invalid color (less than 0):
+    less_than_color_bound = (-1,0,0)
+    environment = Environment(TEST_SIZE)
+
+    try:
+        environment.add_triangle(v1, v2, v3, less_than_color_bound)
+    except Exception as e:
+        assert e.args == (less_than_color_bound, 'Out of bounds color value(s), values must be: 0 <= value <= 255'), \
+            f'''add_triangle_test(greater than color bound)::
+                    e.args == ((-1,0,0), 'Out of bounds color value(s), values must be: 0 <= value <= 255'): 
+                        {e.args == (less_than_color_bound, 'Out of bounds color value(s), values must be: 0 <= value <= 255')}
+            '''
+
+
+def add_sphere_test(np):
+    TEST_SIZE = (100, 100)
+    center = np.array([1.0, 0.0, 0.0])
+    radius = 1.0
+    color = (0,0,0)
+
+    environment = Environment(TEST_SIZE)
+    environment.add_sphere(center, radius, color)
+    assert np.allclose(environment.shapes[0].center, center) \
+        and isclose(environment.shapes[0].radius, radius) \
+        and environment.shapes[0].color == color, \
+        f'''add_sphere_test::
+                np.allclose(environment.shapes[0].center, center): {np.allclose(environment.shapes[0].center, center)}
+                isclose(environment.shapes[0].radius, radius): {isclose(environment.shapes[0].radius, radius)}
+                environment.shapes[0].color == color: {environment.shapes[0].color == color}
+        '''
+    
+    # Invalid color (greater than 255):
+    greater_than_color_bound = (256,0,0)
+    environment = Environment(TEST_SIZE)
+
+    try:
+        environment.add_sphere(center, radius, greater_than_color_bound)
+    except Exception as e:
+        assert e.args == (greater_than_color_bound, 'Out of bounds color value(s), values must be: 0 <= value <= 255'), \
+            f'''add_sphere_test(greater than color bound)::
+                    e.args == ((256,0,0), 'Out of bounds color value(s), values must be: 0 <= value <= 255'): 
+                        {e.args == (greater_than_color_bound, 'Out of bounds color value(s), values must be: 0 <= value <= 255')}
+            '''
+
+    # Invalid color (less than 0):
+    less_than_color_bound = (-1,0,0)
+    environment = Environment(TEST_SIZE)
+
+    try:
+        environment.add_sphere(center, radius, less_than_color_bound)
+    except Exception as e:
+        assert e.args == (less_than_color_bound, 'Out of bounds color value(s), values must be: 0 <= value <= 255'), \
+            f'''add_sphere_test(greater than color bound)::
+                    e.args == ((-1,0,0), 'Out of bounds color value(s), values must be: 0 <= value <= 255'): 
+                        {e.args == (less_than_color_bound, 'Out of bounds color value(s), values must be: 0 <= value <= 255')}
+            '''
