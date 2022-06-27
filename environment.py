@@ -9,6 +9,7 @@ class Environment:
         self.size: tuple[int, int] = size
         self.lights: list = []
         self.shapes: list = []
+        self.camera = None
     
     def add_light_source(self, light_type: str, intensity: float, pos: array = None, direction: array = None, angle: float = None):
         light_type_lowercase = light_type.lower()
@@ -41,10 +42,14 @@ class Environment:
     
     def with_perspective_camera(self, w: array, v: array, u: array, e: array, d: float):
         self.camera: PerspectiveCamera = PerspectiveCamera(w, v, u, e, d)
-        
+
         return self
     
     def use_camera(self):
-        # TODO currently unsupported
-        raise UnsupportedOperation
-        pass
+        pass # TODO remove this when camera is working
+
+        if self.camera == None:
+            raise Exception('You must set a camera before trying to use it: call \
+            with_parallel_camera or with_perspective_camera first')
+
+        return self.camera.take_picture()

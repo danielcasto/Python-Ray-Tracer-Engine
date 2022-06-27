@@ -17,7 +17,7 @@ def run_tests():
     add_sphere_test(np)
     with_parallel_camera_test(np)
     with_perspective_camera_test(np)
-    use_camera_test()
+    use_camera_test(np)
 
     display_test(pg, np, SCREEN_DIMENSIONS, exit)
 

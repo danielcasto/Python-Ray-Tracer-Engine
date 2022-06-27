@@ -201,6 +201,18 @@ def with_perspective_camera_test(np):
                     isclose(environment.camera.d, d): {isclose(environment.camera.d, d)}
             '''
 
-def use_camera_test():
-    # TODO come back and do this last
-    pass
+def use_camera_test(np):
+    pass # TODO remove this after camera is working and finish this function
+    TEST_SIZE = (100, 100)
+    w = np.array([1.0, 0.0, 0.0])
+    v = np.array([0.0, 1.0, 0.0])
+    u = np.array([0.0, 0.0, 1.0])
+    e = np.array([1.0, 0.0, 0.0])
+
+    # Case with no camera set
+    environment = Environment(TEST_SIZE)
+    try:
+        environment.use_camera()
+    except Exception as e:
+        assert e.args == ('You must set a camera before trying to use it: call \
+            with_parallel_camera or with_perspective_camera first')
