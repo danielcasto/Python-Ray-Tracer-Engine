@@ -31,6 +31,7 @@ def main():
 
     if len(argv) == 2 and argv[1] == 'test':
         run_tests()
+        return
 
     pg.init()
     screen = pg.display.set_mode(SCREEN_DIMENSIONS, pg.RESIZABLE)
