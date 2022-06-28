@@ -3,6 +3,7 @@ from numpy import array, dot
 from numpy.linalg import norm
 from math import isclose
 from ray import Ray
+from shapes import Triangle, Sphere
 
 class Camera:
     def __init__(self, w: array, v: array, u: array, e: array, ray_size: tuple[int, int]):
@@ -10,7 +11,7 @@ class Camera:
         self.v = v
         self.u = u
         self.e = e
-        self.ray_size = ray_size
+        self.ray_size = (ray_size[1], ray_size[0]) # originally was (width, height) bc of pygame, we want (height, width)
 
     def take_picture(self, lights, shapes):
         # TODO currently unsupported
@@ -18,8 +19,44 @@ class Camera:
 
     def get_solutions(self, shapes):
         # Finds ray intersection with shape and returns t('s)
-        # TODO currently unsupported
-        raise UnsupportedOperation
+        solution_arr = array(self.ray_size)
+
+        height = solution_arr.shape[0]
+        width = solution_arr.shape[1]
+
+        for i in range(height):
+            for j in range(width):
+                sphere_t = None
+                triangle_t = None
+
+                for shape in shapes:
+                    if isinstance(shape, Sphere):
+                        sphere_t = self.get_sphere_valid_solution(shape)
+                    elif isinstance(shape, Triangle):
+                        triangle_t = self.get_triangle_valid_solution(shape)
+                    else:
+                        raise Exception(shape, 'This object is not a supported shape or is not a shape at all')
+
+    def get_sphere_valid_solution(self, sphere):
+        ''' Finds ray intersection with a sphere, returns nearest t. If there is no solution, return None
+                * A valid t must be greater than 0.
+                * A set of valid t's must both be greater than 0, if only one is valid, the solutions are discarded (None is returned).
+        '''
+        ''' First, find the discriminant:
+                * If discriminant is greater than 0, two solutions exist.
+                * If disciminant is 0, one solution exists.
+                * If disciminant is less than 0, no solution exists.
+        '''
+
+        # Then, find t('s)
+
+        # Then, validate t('s) and reduce to one t if valid set of solutions
+
+        # Finally, return t or None
+        pass
+
+    def get_triangle_valid_solution(self, triangle):
+        pass
 
 
 class ParallelCamera(Camera):
@@ -29,8 +66,8 @@ class ParallelCamera(Camera):
 
         # set rays
         self.rays = []
-        width = ray_size[0]
-        height = ray_size[1]
+        height = ray_size[0]
+        width = ray_size[1]
 
         top_right_corner: array = array(e + (height//2)*v + (width//2)*u)
         

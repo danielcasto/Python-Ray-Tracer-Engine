@@ -27,3 +27,12 @@ def parallel_camera_init_test(np):
                         np.allclose(camera.rays[i][j].origin, ray_arr[i][j].origin): {np.allclose(camera.rays[i][j].origin, ray_arr[i][j].origin)}
                         np.allclose(camera.rays[i][j].direction, ray_arr[i][j].direction): {np.allclose(camera.rays[i][j].direction, ray_arr[i][j].direction)}
                 '''
+
+def get_sphere_valid_solution_test(np):
+    pass
+
+def get_triangle_valid_solution_test(np):
+    pass
+
+def get_solutions_test(np):
+    pass
