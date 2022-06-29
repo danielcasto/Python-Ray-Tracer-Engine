@@ -41,7 +41,17 @@ class Camera:
         ''' Finds ray intersection with a sphere, returns nearest t. If there is no solution, return None
                 * A valid t must be greater than 0.
                 * A set of valid t's must both be greater than 0, if only one is valid, the solutions are discarded (None is returned).
+        
+            Equation for find t: 
+                t1 = (-b + sqrt(b^2 - 4ac))/2a, 
+                t2 = (-b - sqrt(b^2 - 4ac))/2a
+                
+                Where:
+                    a = (d*d)
+                    b = 2d(o*c)
+                    c = (o-c)*(o-c) - r^2
         '''
+        
         ''' First, find the discriminant:
                 * If discriminant is greater than 0, two solutions exist.
                 * If disciminant is 0, one solution exists.
