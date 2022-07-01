@@ -13,7 +13,9 @@ def run_tests():
     print('\n\nRunning tests...\n\n')
     
     # camera tests
-    parallel_camera_init_test(np)
+    #parallel_camera_init_test(np)
+    #get_sphere_valid_solution_test(np)
+    get_solutions_test(np)
 
     # environnment tests
     '''environment_init_test()

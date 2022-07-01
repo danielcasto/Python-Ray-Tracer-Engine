@@ -1,17 +1,20 @@
 from io import UnsupportedOperation
-from numpy import array, dot
+from typing import Optional
+from numpy import array, dot, empty
 from numpy.linalg import norm
-from math import isclose
+from math import isclose, sqrt
 from ray import Ray
 from shapes import Triangle, Sphere
 
 class Camera:
+    # Note: 'Camera' is meant to be na abstract base class
     def __init__(self, w: array, v: array, u: array, e: array, ray_size: tuple[int, int]):
         self.w = w
         self.v = v
         self.u = u
         self.e = e
         self.ray_size = (ray_size[1], ray_size[0]) # originally was (width, height) bc of pygame, we want (height, width)
+        self.rays: list
 
     def take_picture(self, lights, shapes):
         # TODO currently unsupported
@@ -19,7 +22,7 @@ class Camera:
 
     def get_solutions(self, shapes):
         # Finds ray intersection with shape and returns t('s)
-        solution_arr = array(self.ray_size)
+        solution_arr = empty(self.ray_size, dtype=float)
 
         height = solution_arr.shape[0]
         width = solution_arr.shape[1]
@@ -29,15 +32,22 @@ class Camera:
                 sphere_t = None
                 triangle_t = None
 
+                potential_ts = []
                 for shape in shapes:
                     if isinstance(shape, Sphere):
-                        sphere_t = self.get_sphere_valid_solution(shape)
+                        sphere_t = self.get_sphere_valid_solution(shape, self.rays[i][j])
+                        potential_ts.append(sphere_t)
                     elif isinstance(shape, Triangle):
-                        triangle_t = self.get_triangle_valid_solution(shape)
+                        triangle_t = self.get_triangle_valid_solution(shape, self.rays[i][j])
+                        potential_ts.append(triangle_t)
                     else:
                         raise Exception(shape, 'This object is not a supported shape or is not a shape at all')
 
-    def get_sphere_valid_solution(self, sphere):
+                solution_arr[i, j] = min(potential_ts)
+        
+        return solution_arr
+
+    def get_sphere_valid_solution(self, sphere: Sphere, ray: Ray):
         ''' Finds ray intersection with a sphere, returns nearest t. If there is no solution, return None
                 * A valid t must be greater than 0.
                 * A set of valid t's must both be greater than 0, if only one is valid, the solutions are discarded (None is returned).
@@ -51,22 +61,55 @@ class Camera:
                     b = 2d(o*c)
                     c = (o-c)*(o-c) - r^2
         '''
-        
-        ''' First, find the discriminant:
+        o: array = ray.origin
+        d: array = ray.direction
+        c: array = sphere.center
+        r: float = sphere.radius
+
+        a: float = dot(d, d) # scalar
+        b: float = 2*dot(d, (o-c)) # scalar
+        c: float = dot((o-c), (o-c)) - r**2 # scalar
+
+        ''' find the discriminant:
                 * If discriminant is greater than 0, two solutions exist.
                 * If disciminant is 0, one solution exists.
                 * If disciminant is less than 0, no solution exists.
         '''
+        discriminant: float = b**2 - 4*a*c
+        
+        t1 = Optional[float]
+        t2 = Optional[float]
 
-        # Then, find t('s)
+        #find t('s)
+        if discriminant > 0:
+            t1 = (-b + sqrt(discriminant))/2*a
+            t2 = (-b - sqrt(discriminant))/2*a
+        elif discriminant == 0:
+            t1 = -b/2*a
+            t2 = None
+        else:
+            t1 = None
+            t2 = None
 
         # Then, validate t('s) and reduce to one t if valid set of solutions
+        valid_t: Optional[float]
+
+        if t1 is not None and t2 is not None:
+            if t1 <= 0 or t2 <= 0:
+                valid_t = None # We don't want to render the inside of a sphere
+            else:
+                valid_t = t1 if t1 <= t2 else t2
+        elif t1 is not None:
+            valid_t = t1 if t1 >= 0 else None
+        else:
+            valid_t = None
 
         # Finally, return t or None
-        pass
+        return valid_t
 
-    def get_triangle_valid_solution(self, triangle):
-        pass
+    def get_triangle_valid_solution(self, triangle, ray):
+        # TODO currently unsupported
+        raise UnsupportedOperation
 
 
 class ParallelCamera(Camera):

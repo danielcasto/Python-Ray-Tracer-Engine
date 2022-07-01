@@ -1,4 +1,6 @@
+from turtle import circle
 from camera import *
+from shapes import *
 from ray import Ray
 
 def parallel_camera_init_test(np):
@@ -8,6 +10,7 @@ def parallel_camera_init_test(np):
     u = np.array([0.0, 1.0, 0.0])
     v = np.array([0.0, 0.0, 1.0])
     w = np.array([1.0, 0.0, 0.0])
+
     e = np.array([0.0, 0.0, 0.0])
 
     ray_direction = np.array([-1.0, 0.0, 0.0])
@@ -29,10 +32,48 @@ def parallel_camera_init_test(np):
                 '''
 
 def get_sphere_valid_solution_test(np):
-    pass
+    TEST_SIZE = (1,1)
+
+    u = np.array([0.0, 1.0, 0.0])
+    v = np.array([0.0, 0.0, 1.0])
+    w = np.array([1.0, 0.0, 0.0])
+
+    e = np.array([0.0, 0.0, 0.0])
+
+    camera = ParallelCamera(w, v, u, e, TEST_SIZE)
+
+    center = np.array([-2.0, 0.0, 0.0])
+    radius = 1.2
+    color = (0, 0, 0)
+    sphere = Sphere(center, radius, color)
+
+    expected_output = 0.8
+
+    actual_output = camera.get_sphere_valid_solution(sphere, camera.rays[0][0])
+
+    assert isclose(actual_output, expected_output)
 
 def get_triangle_valid_solution_test(np):
     pass
 
 def get_solutions_test(np):
-    pass
+    TEST_SIZE = (1,1)
+
+    u = np.array([0.0, 1.0, 0.0])
+    v = np.array([0.0, 0.0, 1.0])
+    w = np.array([1.0, 0.0, 0.0])
+
+    e = np.array([0.0, 0.0, 0.0])
+
+    camera = ParallelCamera(w, v, u, e, TEST_SIZE)
+
+    center = np.array([-2.0, 0.0, 0.0])
+    radius = 1.2
+    color = (0, 0, 0)
+    sphere = Sphere(center, radius, color)
+
+    expected_output = np.array([0.8])
+
+    actual_output = camera.get_solutions([sphere])
+
+    assert np.allclose(actual_output, expected_output)
