@@ -36,19 +36,17 @@ class Environment:
         return self
     
     def with_parallel_camera(self, w: array, v: array, u: array, e: array):
-        self.camera: ParallelCamera = ParallelCamera(w, v, u, e, self.size)
+        self.camera: ParallelCamera = ParallelCamera(w, v, u, e, (self.size[1], self.size[0])) # More intuitive to read lists and arrays this way
 
         return self
     
     def with_perspective_camera(self, w: array, v: array, u: array, e: array, d: float):
-        self.camera: PerspectiveCamera = PerspectiveCamera(w, v, u, e, d, self.size)
+        self.camera: PerspectiveCamera = PerspectiveCamera(w, v, u, e, d, (self.size[1], self.size[0])) # More intuitive to read lists and arrays this way
 
         return self
     
     def use_camera(self):
-        pass # TODO remove this when camera is working
-
         if self.camera == None:
             raise Exception('You must set a camera before trying to use it: call with_parallel_camera or with_perspective_camera first')
 
-        return self.camera.take_picture()
+        return self.camera.take_picture(self.lights, self.shapes)

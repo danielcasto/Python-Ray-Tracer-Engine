@@ -1,10 +1,13 @@
 from io import UnsupportedOperation
 from typing import Optional
-from numpy import array, dot, empty
+from numpy import array, dot, empty, transpose
 from numpy.linalg import norm
 from math import isclose, sqrt
 from ray import Ray
 from shapes import Triangle, Sphere
+
+
+# TODO Refactor to have vars for width and height rather than tuple, will make function calls less confusing
 
 class Camera:
     # Note: 'Camera' is meant to be na abstract base class
@@ -13,15 +16,23 @@ class Camera:
         self.v = v
         self.u = u
         self.e = e
-        self.ray_size = (ray_size[1], ray_size[0]) # originally was (width, height) bc of pygame, we want (height, width)
+        self.ray_size = ray_size
         self.rays: list
 
     def take_picture(self, lights, shapes):
-        # TODO currently unsupported
-        raise UnsupportedOperation
+        # TODO refactor to account for lights
+        picture = empty((self.ray_size[1], self.ray_size[0], 3)) # This is the dimensions that pygame uses
+        solutions = transpose(self.get_solutions(shapes))
+        print(type(solutions[0,0]))
+
+        for i in range(self.ray_size[1]):
+            for j in range(self.ray_size[0]):
+                picture[i,j] = (255, 0, 0) if solutions[i,j] > 0 else (0,0,0)
+
+        return picture
 
     def get_solutions(self, shapes):
-        # Finds ray intersection with shape and returns t('s)
+        # Finds ray intersection with shape and returns np.array of t's or None if no intersection at that pixel
         solution_arr = empty(self.ray_size, dtype=float)
 
         height = solution_arr.shape[0]
@@ -35,15 +46,19 @@ class Camera:
                 potential_ts = []
                 for shape in shapes:
                     if isinstance(shape, Sphere):
-                        sphere_t = self.get_sphere_valid_solution(shape, self.rays[i][j])
-                        potential_ts.append(sphere_t)
+                            sphere_t = self.get_sphere_valid_solution(shape, self.rays[i][j])
+                            if sphere_t is not None:
+                                potential_ts.append(sphere_t)
                     elif isinstance(shape, Triangle):
                         triangle_t = self.get_triangle_valid_solution(shape, self.rays[i][j])
                         potential_ts.append(triangle_t)
                     else:
                         raise Exception(shape, 'This object is not a supported shape or is not a shape at all')
 
-                solution_arr[i, j] = min(potential_ts)
+                if len(potential_ts) > 0:
+                    solution_arr[i, j] = min(potential_ts)
+                else:
+                    solution_arr[i,j] = -1
         
         return solution_arr
 

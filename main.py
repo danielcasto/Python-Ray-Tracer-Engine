@@ -13,12 +13,12 @@ def run_tests():
     print('\n\nRunning tests...\n\n')
     
     # camera tests
-    #parallel_camera_init_test(np)
-    #get_sphere_valid_solution_test(np)
+    parallel_camera_init_test(np)
+    get_sphere_valid_solution_test(np)
     get_solutions_test(np)
 
     # environnment tests
-    '''environment_init_test()
+    environment_init_test()
     add_light_sources_test(np)
     add_triangle_test(np)
     add_sphere_test(np)
@@ -26,7 +26,7 @@ def run_tests():
     with_perspective_camera_test(np)
     use_camera_test(np)
 
-    display_test(pg, np, SCREEN_DIMENSIONS, exit)'''
+    display_test(pg, np, SCREEN_DIMENSIONS, exit)
 
 def main():
     # Check for test command line arg
@@ -42,6 +42,13 @@ def main():
     surf = pg.Surface(SCREEN_DIMENSIONS)
 
     env = Environment(SCREEN_DIMENSIONS)
+
+    u = np.array([0.0, 1.0, 0.0])
+    v = np.array([0.0, 0.0, 1.0])
+    w = np.array([1.0, 0.0, 0.0])
+    e = np.array([0.0, 0.0, 0.0])
+
+    env.add_sphere(np.array([-100.0, 0.0, 0.0]), 90.0, (0,0,0)).with_parallel_camera(w, v, u, e)
 
     rgb_arr = env.use_camera()
     
