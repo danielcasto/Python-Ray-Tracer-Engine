@@ -46,9 +46,9 @@ def main():
     u = np.array([0.0, 1.0, 0.0])
     v = np.array([0.0, 0.0, 1.0])
     w = np.array([1.0, 0.0, 0.0])
-    e = np.array([0.0, 0.0, 0.0])
+    e = np.array([0.0, -200.0, 0.0])
 
-    env.add_sphere(np.array([-100.0, 0.0, 0.0]), 90.0, (0,0,0)).with_parallel_camera(w, v, u, e)
+    env.add_sphere(np.array([-100.0, 100.0, 100.0]), 90.0, (0,0,0)).with_parallel_camera(w, v, u, e)
 
     rgb_arr = env.use_camera()
     
