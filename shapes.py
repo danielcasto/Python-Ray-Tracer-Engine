@@ -1,10 +1,10 @@
-from numpy import array
+import numpy as np
 
 class Triangle:
-    def __init__(self, v1: array, v2: array, v3: array, color: tuple[int, int, int]):
-        self.v1: array = v1
-        self.v2: array = v2
-        self.v3: array = v3
+    def __init__(self, v1: np.array, v2: np.array, v3: np.array, color: tuple[int, int, int]):
+        self.v1: np.array = v1
+        self.v2: np.array = v2
+        self.v3: np.array = v3
         self.color: tuple[int, int, int] = color
 
         try:
@@ -14,8 +14,8 @@ class Triangle:
 
 
 class Sphere:
-    def __init__(self, center: array, radius: float, color: tuple[int, int, int]):
-        self.center: array = center
+    def __init__(self, center: np.array, radius: float, color: tuple[int, int, int]):
+        self.center: np.array = center
         self.radius: float = radius
         self.color: tuple[int, int, int] = color
 
