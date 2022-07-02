@@ -1,6 +1,7 @@
+import numpy as np
 from io import UnsupportedOperation
 from typing import Optional
-from numpy import array, dot, empty, transpose
+#from numpy import array, dot, empty, transpose
 from numpy.linalg import norm
 from math import isclose, sqrt
 from ray import Ray
@@ -11,7 +12,7 @@ from shapes import Triangle, Sphere
 
 class Camera:
     # Note: 'Camera' is meant to be na abstract base class
-    def __init__(self, w: array, v: array, u: array, e: array, ray_size: tuple[int, int]):
+    def __init__(self, w: np.array, v: np.array, u: np.array, e: np.array, ray_size: tuple[int, int]):
         self.w = w
         self.v = v
         self.u = u
@@ -21,8 +22,8 @@ class Camera:
 
     def take_picture(self, lights, shapes):
         # TODO refactor to account for lights
-        picture = empty((self.ray_size[1], self.ray_size[0], 3)) # This is the dimensions that pygame uses
-        solutions = transpose(self.get_solutions(shapes))
+        picture = np.empty((self.ray_size[1], self.ray_size[0], 3)) # This is the dimensions that pygame uses
+        solutions = np.transpose(self.get_solutions(shapes))
         print(type(solutions[0,0]))
 
         for i in range(self.ray_size[1]):
@@ -33,7 +34,7 @@ class Camera:
 
     def get_solutions(self, shapes):
         # Finds ray intersection with shape and returns np.array of t's or None if no intersection at that pixel
-        solution_arr = empty(self.ray_size, dtype=float)
+        solution_arr = np.empty(self.ray_size, dtype=float)
 
         height = solution_arr.shape[0]
         width = solution_arr.shape[1]
@@ -76,14 +77,14 @@ class Camera:
                     b = 2d(o*c)
                     c = (o-c)*(o-c) - r^2
         '''
-        o: array = ray.origin
-        d: array = ray.direction
-        c: array = sphere.center
+        o: np.array = ray.origin
+        d: np.array = ray.direction
+        c: np.array = sphere.center
         r: float = sphere.radius
 
-        a: float = dot(d, d) # scalar
-        b: float = 2*dot(d, (o-c)) # scalar
-        c: float = dot((o-c), (o-c)) - r**2 # scalar
+        a: float = np.dot(d, d) # scalar
+        b: float = 2*np.dot(d, (o-c)) # scalar
+        c: float = np.dot((o-c), (o-c)) - r**2 # scalar
 
         ''' find the discriminant:
                 * If discriminant is greater than 0, two solutions exist.
@@ -128,7 +129,7 @@ class Camera:
 
 
 class ParallelCamera(Camera):
-    def __init__(self, w: array, v: array, u: array, e: array, ray_size: tuple[int, int]):
+    def __init__(self, w: np.array, v: np.array, u: np.array, e: np.array, ray_size: tuple[int, int]):
         super().__init__(w, v, u, e, ray_size)
         self.set_basis(w, v, u, e)
 
@@ -137,7 +138,7 @@ class ParallelCamera(Camera):
         height = ray_size[0]
         width = ray_size[1]
 
-        top_right_corner: array = array(e + (height//2)*v + (width//2)*u)
+        top_right_corner: np.array = np.array(e + (height//2)*v + (width//2)*u)
         
         for i in range(height):
             self.rays.append([])
@@ -148,14 +149,14 @@ class ParallelCamera(Camera):
             for j in range(width):
                 self.rays[i][(width-1)-j] = Ray(top_right_corner - i*v - j*u, -w)
     
-    def set_basis(self, w: array, v: array, u: array, e: array):
-        self.w: array = w/norm(w)
-        self.v: array = v/norm(v)
-        self.u: array = u/norm(u)
-        self.e: array = e
+    def set_basis(self, w: np.array, v: np.array, u: np.array, e: np.array):
+        self.w: np.array = w/norm(w)
+        self.v: np.array = v/norm(v)
+        self.u: np.array = u/norm(u)
+        self.e: np.array = e
 
         try:
-            assert isclose(dot(w, v), 0.0) and isclose(dot(v, u), 0.0) and isclose(dot(u, w), 0.0)
+            assert isclose(np.dot(w, v), 0.0) and isclose(np.dot(v, u), 0.0) and isclose(np.dot(u, w), 0.0)
         except AssertionError:
             raise Exception(w, v, u, 'These three vectors are not orthogonal to each other')
 
@@ -163,18 +164,18 @@ class ParallelCamera(Camera):
 
 
 class PerspectiveCamera(Camera):
-    def __init__(self, w: array, v: array, u: array, e: array, d: float, ray_size: tuple[int, int]):
+    def __init__(self, w: np.array, v: np.array, u: np.array, e: np.array, d: float, ray_size: tuple[int, int]):
         super().__init__(w, v, u, e, ray_size)
         self.set_basis(w, v, u, e, d)
 
-    def set_basis(self, w: array, v: array, u: array, e: array, d: float):
-        self.w: array = w/norm(w)
-        self.v: array = v/norm(v)
-        self.u: array = u/norm(u)
-        self.e: array = e
+    def set_basis(self, w: np.array, v: np.array, u: np.array, e: np.array, d: float):
+        self.w: np.array = w/norm(w)
+        self.v: np.array = v/norm(v)
+        self.u: np.array = u/norm(u)
+        self.e: np.array = e
 
         try:
-            assert isclose(dot(w, v), 0.0) and isclose(dot(v, u), 0.0) and isclose(dot(u, w), 0.0)
+            assert isclose(np.dot(w, v), 0.0) and isclose(np.dot(v, u), 0.0) and isclose(np.dot(u, w), 0.0)
         except AssertionError:
             raise Exception(w, v, u, 'These three vectors are not orthogonal to each other')
 
