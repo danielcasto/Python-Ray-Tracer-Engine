@@ -18,13 +18,12 @@ class Camera:
         self.u = u
         self.e = e
         self.ray_size = ray_size
-        self.rays: list
+        self.rays: np.array
 
     def take_picture(self, lights, shapes):
         # TODO refactor to account for lights
         picture = np.empty((self.ray_size[1], self.ray_size[0], 3)) # This is the dimensions that pygame uses
         solutions = np.transpose(self.get_solutions(shapes))
-        print(type(solutions[0,0]))
 
         for i in range(self.ray_size[1]):
             for j in range(self.ray_size[0]):
@@ -134,20 +133,15 @@ class ParallelCamera(Camera):
         self.set_basis(w, v, u, e)
 
         # set rays
-        self.rays = []
-        height = ray_size[0]
-        width = ray_size[1]
+        self.rays = np.empty(self.ray_size, dtype=Ray)
+        height = self.rays.shape[0]
+        width = self.rays.shape[1]
 
-        top_right_corner: np.array = np.array(e + (height//2)*v + (width//2)*u)
-        
-        for i in range(height):
-            self.rays.append([])
-            for j in range(width):
-                self.rays[i].append(None)
+        top_right_corner_pos: np.array = np.array(e + (height//2)*v + (width//2)*u)
         
         for i in range(height):
             for j in range(width):
-                self.rays[i][(width-1)-j] = Ray(top_right_corner - i*v - j*u, -w)
+                self.rays[i, (width-1)-j] = Ray(top_right_corner_pos - i*v - j*u, -w)
     
     def set_basis(self, w: np.array, v: np.array, u: np.array, e: np.array):
         self.w: np.array = w/norm(w)
@@ -167,6 +161,8 @@ class PerspectiveCamera(Camera):
     def __init__(self, w: np.array, v: np.array, u: np.array, e: np.array, d: float, ray_size: tuple[int, int]):
         super().__init__(w, v, u, e, ray_size)
         self.set_basis(w, v, u, e, d)
+
+        # TODO add ray init here
 
     def set_basis(self, w: np.array, v: np.array, u: np.array, e: np.array, d: float):
         self.w: np.array = w/norm(w)

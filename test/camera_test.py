@@ -15,20 +15,20 @@ def parallel_camera_init_test(np):
 
     ray_direction = np.array([-1.0, 0.0, 0.0])
 
-    ray_arr = []
-    ray_arr.append([Ray(np.array([0.0, -1.0, 1.0]), ray_direction), Ray(np.array([0.0, 0.0, 1.0]), ray_direction), Ray(np.array([0.0, 1.0, 1.0]), ray_direction)])
-    ray_arr.append([Ray(np.array([0.0, -1.0, 0.0]), ray_direction), Ray(np.array([0.0, 0.0, 0.0]), ray_direction), Ray(np.array([0.0, 1.0, 0.0]), ray_direction)])
-    ray_arr.append([Ray(np.array([0.0, -1.0, -1.0]), ray_direction), Ray(np.array([0.0, 0.0, -1.0]), ray_direction), Ray(np.array([0.0, 1.0, -1.0]), ray_direction)])
+    ray_arr = np.empty((3,3), dtype=Ray)
+    ray_arr[0] = np.array([Ray(np.array([0.0, -1.0, 1.0]), ray_direction), Ray(np.array([0.0, 0.0, 1.0]), ray_direction), Ray(np.array([0.0, 1.0, 1.0]), ray_direction)])
+    ray_arr[1] = np.array([Ray(np.array([0.0, -1.0, 0.0]), ray_direction), Ray(np.array([0.0, 0.0, 0.0]), ray_direction), Ray(np.array([0.0, 1.0, 0.0]), ray_direction)])
+    ray_arr[2] = np.array([Ray(np.array([0.0, -1.0, -1.0]), ray_direction), Ray(np.array([0.0, 0.0, -1.0]), ray_direction), Ray(np.array([0.0, 1.0, -1.0]), ray_direction)])
 
     camera = ParallelCamera(w, v, u, e, TEST_SIZE)
 
     for i in range(len(ray_arr)):
         for j in range(len(ray_arr[i])):
-            assert np.allclose(camera.rays[i][j].origin, ray_arr[i][j].origin) \
-                and np.allclose(camera.rays[i][j].direction, ray_arr[i][j].direction), \
+            assert np.allclose(camera.rays[i,j].origin, ray_arr[i][j].origin) \
+                and np.allclose(camera.rays[i,j].direction, ray_arr[i][j].direction), \
                 f'''parallel_camera_init_test(valid camera plane)::
-                        np.allclose(camera.rays[i][j].origin, ray_arr[i][j].origin): {np.allclose(camera.rays[i][j].origin, ray_arr[i][j].origin)}
-                        np.allclose(camera.rays[i][j].direction, ray_arr[i][j].direction): {np.allclose(camera.rays[i][j].direction, ray_arr[i][j].direction)}
+                        np.allclose(camera.rays[i,j].origin, ray_arr[i][j].origin): {np.allclose(camera.rays[i,j].origin, ray_arr[i][j].origin)}
+                        np.allclose(camera.rays[i,j].direction, ray_arr[i][j].direction): {np.allclose(camera.rays[i,j].direction, ray_arr[i][j].direction)}
                 '''
 
 def get_sphere_valid_solution_test(np):
